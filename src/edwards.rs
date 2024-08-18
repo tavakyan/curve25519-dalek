@@ -162,18 +162,19 @@ cfg_if::cfg_if! {
                 let mut limbs = [0u32; 16];
 
                 // Ensure that the point is normalized.
-                assert_eq!(value.Z, FieldElement::ONE);
+                assert_eq!(value.Z, FieldElement::one());
 
+                // Changes .as_bytes to to_bytes and they are equivalent
                 // Convert the x and y coordinates to little endian u32 limbs.
                 for (x_limb, x_bytes) in limbs[..8]
                     .iter_mut()
-                    .zip(value.X.as_bytes().chunks_exact(4))
+                    .zip(value.X.to_bytes().chunks_exact(4))
                 {
                     *x_limb = u32::from_le_bytes(x_bytes.try_into().unwrap());
                 }
                 for (y_limb, y_bytes) in limbs[8..]
                     .iter_mut()
-                    .zip(value.Y.as_bytes().chunks_exact(4))
+                    .zip(value.Y.to_bytes().chunks_exact(4))
                 {
                     *y_limb = u32::from_le_bytes(y_bytes.try_into().unwrap());
                 }
@@ -189,7 +190,7 @@ cfg_if::cfg_if! {
                 let y = FieldElement::from_bytes(&le_bytes[32..].try_into().unwrap());
                 let t = &x * &y;
 
-                Self { X: x, Y: y, Z: FieldElement::ONE, T: t }
+                Self { X: x, Y: y, Z: FieldElement::one(), T: t }
             }
         }
     }
@@ -269,7 +270,7 @@ impl CompressedEdwardsY {
         }
         let X = FieldElement::from_bytes(&XY_bytes[0..32].try_into().unwrap());
         let Y = FieldElement::from_bytes(&XY_bytes[32..].try_into().unwrap());
-        let Z = FieldElement::ONE;
+        let Z = FieldElement::one();
         return Some(EdwardsPoint {
             X,
             Y,

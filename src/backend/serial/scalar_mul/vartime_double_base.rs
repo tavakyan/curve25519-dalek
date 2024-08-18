@@ -75,8 +75,9 @@ use sp1_lib::{ed25519::Ed25519AffinePoint, utils::AffinePoint};
 pub fn mul(a: &Scalar, A: &EdwardsPoint, b: &Scalar) -> EdwardsPoint {
     let A: Ed25519AffinePoint = (*A).into();
 
-    let a_bits = a.bits_le().collect::<Vec<bool>>();
-    let b_bits = b.bits_le().collect::<Vec<bool>>();
+    // changes from bits to bits_le as bits is little endian
+    let a_bits = a.bits().collect::<Vec<bool>>();
+    let b_bits = b.bits().collect::<Vec<bool>>();
 
     // Note: The base point is the identity point.
     let res = AffinePoint::multi_scalar_multiplication(
