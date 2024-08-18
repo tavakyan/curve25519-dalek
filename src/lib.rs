@@ -250,13 +250,16 @@
 // External dependencies:
 //------------------------------------------------------------------------
 
-#[cfg(all(feature = "alloc", not(feature = "std")))]
-#[macro_use]
+// #[cfg(all(feature = "alloc", not(feature = "std")))]
+// #[macro_use]
 extern crate alloc;
 
 #[cfg(feature = "std")]
 #[macro_use]
 extern crate std;
+
+#[cfg(all(target_os = "zkvm", target_vendor = "succinct"))]
+extern crate sp1_lib;
 
 #[cfg(all(feature = "nightly", feature = "packed_simd"))]
 extern crate packed_simd;
